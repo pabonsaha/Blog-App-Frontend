@@ -14,7 +14,7 @@
           >
           <div
             class="profile"
-            v-on:click="toogleProfileMenu()"
+            v-on:click="toogleProfileMenu($event)"
             v-if="userInfo"
             ref="profile"
           >
@@ -41,10 +41,8 @@
                   </router-link>
                 </div>
                 <div class="option">
-                  <router-link class="option" to="#">
-                    <signOutIcon class="icon" />
-                    <p>Sign Out</p>
-                  </router-link>
+                  <signOutIcon class="icon" />
+                  <p>Sign Out</p>
                 </div>
               </div>
             </div>
@@ -109,8 +107,8 @@ export default {
       this.mobileNav = !this.mobileNav;
     },
 
-    toogleProfileMenu(event) {
-      if (event.target === this.$refs.profile) {
+    toogleProfileMenu($event) {
+      if ($event.target === this.$refs.profile) {
         this.profileMenu = !this.profileMenu;
       }
     },
@@ -125,7 +123,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 header {
   background-color: rgb(255, 255, 255);
   padding: 0 25px;
@@ -193,6 +191,10 @@ header nav .branding .header {
   border-radius: 50%;
   color: white;
   background-color: #303030;
+
+  span {
+    pointer-events: none;
+  }
 }
 
 .profile .profile-menu {
