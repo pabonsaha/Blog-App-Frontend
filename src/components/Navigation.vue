@@ -6,10 +6,49 @@
       </div>
       <div class="nav-links">
         <ul v-show="!mobile">
-          <router-link class="link" :to="{name:'home'}">Home</router-link>
-          <router-link class="link" :to="{name:'blogs'}">Blog</router-link>
+          <router-link class="link" :to="{ name: 'home' }">Home</router-link>
+          <router-link class="link" :to="{ name: 'blogs' }">Blog</router-link>
           <router-link class="link" to="#">Create Post</router-link>
-          <router-link class="link" :to="{name:'login'}">Login/Register</router-link>
+          <router-link class="link" v-if="!userInfo" :to="{ name: 'login' }"
+            >Login/Register</router-link
+          >
+          <div
+            class="profile"
+            v-on:click="toogleProfileMenu()"
+            v-if="userInfo"
+            ref="profile"
+          >
+            <span>User</span>
+            <div v-show="profileMenu" class="profile-menu">
+              <div class="info">
+                <p class="initials"></p>
+                <div class="right">
+                  <p>{{ userInfo.name }}</p>
+                  <p>{{ userInfo.email }}</p>
+                </div>
+              </div>
+              <div class="options">
+                <div class="option">
+                  <router-link class="option" to="#">
+                    <userIcon class="icon" />
+                    <p>Profile</p>
+                  </router-link>
+                </div>
+                <div class="option">
+                  <router-link class="option" to="#">
+                    <adminIcon class="icon" />
+                    <p>Admin</p>
+                  </router-link>
+                </div>
+                <div class="option">
+                  <router-link class="option" to="#">
+                    <signOutIcon class="icon" />
+                    <p>Sign Out</p>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
         </ul>
       </div>
     </nav>
@@ -18,10 +57,12 @@
 
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
-        <router-link class="link" :to="{name:'home'}">Home</router-link>
-        <router-link class="link" :to="{name:'blogs'}">Blog</router-link>
+        <router-link class="link" :to="{ name: 'home' }">Home</router-link>
+        <router-link class="link" :to="{ name: 'blogs' }">Blog</router-link>
         <router-link class="link" to="#">Create Post</router-link>
-        <router-link class="link" :to="{name:'login'}">Login/Register</router-link>
+        <router-link class="link" v-if="!userInfo" :to="{ name: 'login' }"
+          >Login/Register</router-link
+        >
       </ul>
     </transition>
   </header>
@@ -29,10 +70,17 @@
 
 <script>
 import MenuIcon from "../assets/Icons/bars-regular.svg";
+import userIcon from "../assets/Icons/user-alt-light.svg";
+import adminIcon from "../assets/Icons/user-crown-light.svg";
+import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
+import { useUserStore } from "../store/userStore";
 
 export default {
   components: {
     MenuIcon,
+    userIcon,
+    adminIcon,
+    signOutIcon,
   },
 
   data() {
@@ -40,6 +88,8 @@ export default {
       mobile: false,
       mobileNav: false,
       windowWidth: null,
+      userInfo: null,
+      profileMenu: false,
     };
   },
 
@@ -58,9 +108,17 @@ export default {
     toggleMobileNav() {
       this.mobileNav = !this.mobileNav;
     },
+
+    toogleProfileMenu(event) {
+      if (event.target === this.$refs.profile) {
+        this.profileMenu = !this.profileMenu;
+      }
+    },
   },
 
   created() {
+    this.userInfo = useUserStore().getUser();
+
     window.addEventListener("resize", this.checkScreen);
     this.checkScreen();
   },
@@ -112,6 +170,8 @@ header nav .branding .header {
 }
 
 .nav-links ul {
+  display: flex;
+  align-items: center;
   margin-right: 32px;
 }
 
@@ -120,6 +180,89 @@ header nav .branding .header {
 }
 .nav-links ul .link:last-child {
   margin-right: 0px;
+}
+
+.profile {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: white;
+  background-color: #303030;
+}
+
+.profile .profile-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 250px;
+  background-color: #303030;
+  box-shadow: 0 4x 6px -1px rgba(0, 0, 0, 0.1),
+    0px 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.profile .profile-menu .info {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  border-bottom: 1px solid white;
+}
+
+.profile .profile-menu .info .initials {
+  position: initial;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  color: #303030;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+
+.profile .profile-menu .info .initials .right {
+  flex: 1;
+  margin-left: 24px;
+}
+
+.profile .profile-menu .info .initials .right p:nth-child(1) {
+  font-size: 14px;
+}
+
+.profile .profile-menu .info .initials .right p:nth-child(1),
+p:nth-child(3) {
+  font-size: 12px;
+}
+
+.profile .profile-menu .options {
+  padding: 15px;
+}
+
+.profile .profile-menu .options .option {
+  text-decoration: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.profile .profile-menu .options .option:last-child {
+  margin-bottom: 0px;
+}
+
+.profile .profile-menu .options .option .icon {
+  width: 18px;
+  height: auto;
+}
+
+.profile .profile-menu .options .option p {
+  font-size: 14px;
+  margin-left: 12px;
 }
 
 .menu-icon {
