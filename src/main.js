@@ -6,6 +6,7 @@ import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import axios from "axios";
 
 const app = createApp(App);
 const pinia = createPinia();

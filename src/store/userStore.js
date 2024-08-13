@@ -4,7 +4,7 @@ export const useUserStore = defineStore("user", {
   state: function () {
     return {
       user: null,
-      token: "",
+      token: null,
     };
   },
 

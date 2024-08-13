@@ -40,7 +40,7 @@
                     <p>Admin</p>
                   </router-link>
                 </div>
-                <div class="option">
+                <div @click="signOutUser" class="option">
                   <signOutIcon class="icon" />
                   <p>Sign Out</p>
                 </div>
@@ -72,6 +72,7 @@ import userIcon from "../assets/Icons/user-alt-light.svg";
 import adminIcon from "../assets/Icons/user-crown-light.svg";
 import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
 import { useUserStore } from "../store/userStore";
+import axios from "axios";
 
 export default {
   components: {
@@ -111,6 +112,21 @@ export default {
       if ($event.target === this.$refs.profile) {
         this.profileMenu = !this.profileMenu;
       }
+    },
+
+    async signOutUser() {
+      await axios
+        .post(import.meta.env.VITE_APP_API_URL + "/signout")
+        .then((data) => {
+          useUserStore().setUser(data.data);
+          this.$router.push({ name: "home" });
+          useToast().success(data.data.message);
+        })
+        .catch((error) => {
+          console.log(error, "here");
+          this.errorList = error?.response?.data?.errors ?? [];
+          this.errorMessage = error?.response?.data?.message;
+        });
     },
   },
 
