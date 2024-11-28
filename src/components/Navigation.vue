@@ -10,13 +10,14 @@
           <router-link class="link" :to="{ name: 'blogs' }">Blog</router-link>
           <router-link class="link" to="#">Create Post</router-link>
           <router-link class="link" v-if="!userInfo" :to="{ name: 'login' }"
-            >Login/Register</router-link
+          >Login/Register
+          </router-link
           >
           <div
-            class="profile"
-            v-on:click="toogleProfileMenu($event)"
-            v-if="userInfo"
-            ref="profile"
+              class="profile"
+              v-on:click="toogleProfileMenu($event)"
+              v-if="userInfo"
+              ref="profile"
           >
             <span>User</span>
             <div v-show="profileMenu" class="profile-menu">
@@ -30,18 +31,18 @@
               <div class="options">
                 <div class="option">
                   <router-link class="option" to="#">
-                    <userIcon class="icon" />
+                    <userIcon class="icon"/>
                     <p>Profile</p>
                   </router-link>
                 </div>
                 <div class="option">
                   <router-link class="option" to="#">
-                    <adminIcon class="icon" />
+                    <adminIcon class="icon"/>
                     <p>Admin</p>
                   </router-link>
                 </div>
                 <div @click="signOutUser" class="option">
-                  <signOutIcon class="icon" />
+                  <signOutIcon class="icon"/>
                   <p>Sign Out</p>
                 </div>
               </div>
@@ -51,7 +52,7 @@
       </div>
     </nav>
 
-    <MenuIcon class="menu-icon" v-show="mobile" @click="toggleMobileNav" />
+    <MenuIcon class="menu-icon" v-show="mobile" @click="toggleMobileNav"/>
 
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
@@ -59,7 +60,8 @@
         <router-link class="link" :to="{ name: 'blogs' }">Blog</router-link>
         <router-link class="link" to="#">Create Post</router-link>
         <router-link class="link" v-if="!userInfo" :to="{ name: 'login' }"
-          >Login/Register</router-link
+        >Login/Register
+        </router-link
         >
       </ul>
     </transition>
@@ -71,7 +73,7 @@ import MenuIcon from "../assets/Icons/bars-regular.svg";
 import userIcon from "../assets/Icons/user-alt-light.svg";
 import adminIcon from "../assets/Icons/user-crown-light.svg";
 import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
-import { useUserStore } from "../store/userStore";
+import {useUserStore} from "@/store/userStore";
 import axios from "axios";
 
 export default {
@@ -115,18 +117,23 @@ export default {
     },
 
     async signOutUser() {
+      let config = {
+        headers: {
+          Authorization: 'Bearer ' + useUserStore().getToken(),
+        }
+      }
       await axios
-        .post(import.meta.env.VITE_APP_API_URL + "/signout")
-        .then((data) => {
-          useUserStore().setUser(data.data);
-          this.$router.push({ name: "home" });
-          useToast().success(data.data.message);
-        })
-        .catch((error) => {
-          console.log(error, "here");
-          this.errorList = error?.response?.data?.errors ?? [];
-          this.errorMessage = error?.response?.data?.message;
-        });
+          .post(import.meta.env.VITE_APP_API_URL + "/signout",{} ,config)
+          .then((data) => {
+            useUserStore().setUser(data.data);
+            this.$router.push({name: "home"});
+            useToast().success(data.data.message);
+          })
+          .catch((error) => {
+            console.log(error, "here");
+            this.errorList = error?.response?.data?.errors ?? [];
+            this.errorMessage = error?.response?.data?.message;
+          });
     },
   },
 
@@ -192,6 +199,7 @@ header nav .branding .header {
 .nav-links ul .link {
   margin-right: 32px;
 }
+
 .nav-links ul .link:last-child {
   margin-right: 0px;
 }
@@ -220,7 +228,7 @@ header nav .branding .header {
   width: 250px;
   background-color: #303030;
   box-shadow: 0 4x 6px -1px rgba(0, 0, 0, 0.1),
-    0px 2px 4px -1px rgba(0, 0, 0, 0.06);
+  0px 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .profile .profile-menu .info {

@@ -95,7 +95,6 @@ export default{
 
                 }).catch((error)=>
                 {
-                    console.log(error,'here');
                     this.errorList = error.response.data.errors;
                 });
 
