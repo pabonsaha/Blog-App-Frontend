@@ -123,9 +123,10 @@ export default {
         }
       }
       await axios
-          .post(import.meta.env.VITE_APP_API_URL + "/signout",{} ,config)
+          .post("signout", {}, config)
           .then((data) => {
             useUserStore().setUser(data.data);
+            this.userInfo = useUserStore().getUser();
             this.$router.push({name: "home"});
             useToast().success(data.data.message);
           })

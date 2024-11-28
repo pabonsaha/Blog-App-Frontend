@@ -34,7 +34,7 @@
 import Email from '../assets/Icons/envelope-regular.svg';
 import Password from '../assets/Icons/lock-alt-solid.svg';
 import {useToast} from "vue-toastification";
-import {useUserStore} from '../store/userStore';
+import {useUserStore} from '@/store/userStore';
 import axios from 'axios';
 
 export default {
@@ -55,7 +55,7 @@ export default {
 
         this.error = false;
         this.errorMessage = '';
-        await axios.post(import.meta.env.VITE_APP_API_URL + '/login', {
+        await axios.post('login', {
           email: this.email,
           password: this.password,
         })

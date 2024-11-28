@@ -81,7 +81,7 @@ export default{
             {
                 this.error = false;
                 this.errorMessage= '';
-                await axios.post(import.meta.env.VITE_APP_API_URL + '/registration',{
+                await axios.post('registration',{
                     firstName: this.firstName,
                     lastName: this.lastName,
                     userName: this.username,
